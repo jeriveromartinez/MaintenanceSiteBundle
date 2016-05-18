@@ -1,0 +1,35 @@
+{
+    "name" : "jeriveromartinez/maintenance-site-bundle",
+    "description" : "This bundle allows your site in maintenance mode",
+    "type" : "symfony-bundle",
+    "authors" : [{
+        "name" : "Julio Rivero",
+        "email" : "jeriveromartinez@gmail.com"
+    }],
+    "keywords" : [
+        "maintenance mode test site offline"
+    ],
+    "license" : [
+        "MIT"
+    ],
+    "require" : {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "~2.3",
+        "symfony/symfony": "*",
+        "doctrine/orm": "*",
+        "doctrine/doctrine-bundle": "*"
+    },
+    "autoload" : {
+        "psr-0" : {
+            "J3rm\\MaintenanceSiteBundle\\" : ""
+        }
+    },
+    "target-dir" : "J3rm/MaintenanceSiteBundle",
+    "repositories" : [{
+    }],
+    "extra" : {
+    "branch-alias" : {
+            "dev-master" : "0.6-dev"
+        }
+    }
+} 

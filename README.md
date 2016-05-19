@@ -26,3 +26,5 @@ Or<br/>
 <li>database_offline - It is defined where to catch the value for maintenance mode.</li>
 </ul>
 
+<br/>
+####you most be update de TwigBundle, to handle the errors, add error503.html.twig template.

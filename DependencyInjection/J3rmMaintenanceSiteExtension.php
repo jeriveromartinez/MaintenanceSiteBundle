@@ -26,8 +26,8 @@ class J3rmMaintenanceSiteExtension extends Extension
         $loader->load('services.yml');
 
         $container->setParameter('j3rm_maintenance_site.path_enable', $config['path_enable']);
-        $container->setParameter('j3rm_maintenance_site.name_path_offline', $config['name_path_offline']);
         $container->setParameter('j3rm_maintenance_site.roles_enable_offline', $config['roles_enable_offline']);
-        $container->setParameter('j3rm_maintenance_site.maintenance', $config['maintenance']);
+        $container->setParameter('j3rm_maintenance_site.maintenance', (isset($config['maintenance']) ? $config['maintenance'] : null));
+        $container->setParameter('j3rm_maintenance_site.database_offline', (isset($config['database_offline']) ? $config['database_offline'] : null));
     }
 }

@@ -1,6 +1,6 @@
 services:
     j3rm_maintenance_site:
         class: J3rm\MaintenanceSiteBundle\Listener\MaintenanceListener
-        arguments: ['@security.authorization_checker','@router',%j3rm_maintenance_site.path_enable%,%j3rm_maintenance_site.name_path_offline%,%j3rm_maintenance_site.roles_enable_offline%,%j3rm_maintenance_site.maintenance%]
+        arguments: ['@security.authorization_checker','@doctrine.orm.default_entity_manager',%j3rm_maintenance_site.path_enable%,%j3rm_maintenance_site.roles_enable_offline%,%j3rm_maintenance_site.maintenance%,%j3rm_maintenance_site.database_offline%]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

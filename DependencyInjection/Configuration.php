@@ -27,13 +27,10 @@ class Configuration implements ConfigurationInterface
 
         $rootNode->children()
             ->scalarNode('path_enable')->defaultValue('/manager')->end()
-            ->scalarNode('name_path_offline')->defaultValue('offline')->end()
-            ->arrayNode('roles_enable_offline')
-            ->prototype('scalar')->end()
-            ->defaultValue(array('ROLE_ADMIN'))
-            ->end()
-            ->booleanNode('maintenance')->defaultValue(true)
-            ->end();
+            ->arrayNode('roles_enable_offline')->prototype('scalar')->end()
+            ->defaultValue(array('ROLE_ADMIN'))->end()
+            ->booleanNode('maintenance')->end()
+            ->scalarNode('database_offline')->defaultValue('AppBundle:SiteEntity:ColumnName')->end();
 
         return $treeBuilder;
     }

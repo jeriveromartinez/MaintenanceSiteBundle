@@ -26,7 +26,8 @@ class Configuration implements ConfigurationInterface
         // more information on that topic.
 
         $rootNode->children()
-            ->scalarNode('path_enable')->defaultValue('/manager')->end()
+            ->arrayNode('path_enable')->prototype('scalar')->end()
+            ->defaultValue(array('/manager'))->end()
             ->arrayNode('roles_enable_offline')->prototype('scalar')->end()
             ->defaultValue(array('ROLE_ADMIN'))->end()
             ->booleanNode('maintenance')->end()

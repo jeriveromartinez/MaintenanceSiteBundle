@@ -11,8 +11,8 @@ namespace J3rm\MaintenanceSiteBundle\Listener;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
@@ -43,21 +43,25 @@ class MaintenanceListener
         $this->databaseAttribute = $databaseAttribute;
     }
 
+    /**
+     * @param GetResponseEvent $event
+     * @throws NotFoundResourceException
+     * @throws ServiceUnavailableHttpException
+     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
 
         if ($this->isOffline() and !$this->isPermitUrl($request) and !$this->isPermitRole()) {
-            $response = new Response();
-            $response->setStatusCode(503);
-            $event->setResponse($response);
+            throw new ServiceUnavailableHttpException();
         }
     }
 
     private function isPermitUrl($request)
     {
-        if (preg_match('{' . $this->pathEnable . '}', $request->getPathInfo()))
-            return true;
+        foreach ($this->pathEnable as $path)
+            if (preg_match('{' . $path . '}', $request->getPathInfo()))
+                return true;
         return false;
     }
 

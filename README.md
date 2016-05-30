@@ -9,13 +9,13 @@ new J3rm\MaintenanceSiteBundle\J3rmMaintenanceSiteBundle(),
 ##configurations parameter
 
 <pre><code>j3rm_maintenance_site:<br/>
-      path_enable: /admin <br/>
+      path_enable: [/admin,/login] <br/>
       roles_enable_offline: [ROLE_USER,ROLE_ADMIN]<br/>
       maintenance: true<br/></code>
 </pre><br/>
 Or<br/>
 <pre><code>j3rm_maintenance_site:<br/>
-      path_enable: /admin <br/>
+      path_enable: [/admin,/login] <br/>
       roles_enable_offline: [ROLE_USER,ROLE_ADMIN]<br/>
       database_offline: YourBundle:YourEntity:attributeName (the attribute most be a boolean)<br/></code>
 </pre><br/>

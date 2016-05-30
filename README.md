@@ -27,4 +27,4 @@ Or<br/>
 </ul>
 
 <br/>
-####you most be update de TwigBundle, to handle the errors, add error503.html.twig template.
+####you most be update the TwigBundle, to handle the errors, add error503.html.twig template.

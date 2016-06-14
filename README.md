@@ -27,4 +27,10 @@ Or<br/>
 </ul>
 
 <br/>
-####you most be update the TwigBundle, to handle the errors, add error503.html.twig template.
+####this bundle redirect to offline page, for that add this to routing.yml<br/>
+<pre><code>
+app_offline:<br/>
+    resource: "@J3rmMaintenanceSiteBundle/Controller/"<br/>
+    type:     annotation<br/>
+</code></pre>
+####create a error503.html.twig file into "Resources/TwigBundle/views/Exception/"

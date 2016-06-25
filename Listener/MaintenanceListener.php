@@ -81,8 +81,9 @@ class MaintenanceListener
         $this->pathEnable[] = $this->router->generate('offline');
         $this->pathEnable[] = '/js/';
         $this->pathEnable[] = '/css/';
-        $this->pathEnable[] = '/bundle/';
+        $this->pathEnable[] = '/bundles/';
         $this->pathEnable[] = '/_wdt/';
+        $this->pathEnable[] = '/_profiler/';
 
         foreach ($this->pathEnable as $path)
             if (preg_match('{' . $path . '}', $request->getPathInfo()))

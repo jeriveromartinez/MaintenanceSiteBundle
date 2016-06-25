@@ -11,7 +11,7 @@ use Symfony\Component\Translation\Exception\NotFoundResourceException;
 class OfflineController extends Controller
 {
     /**
-     * @Route("/offline/", name="offline")
+     * @Route("/{_locale}/offline/", name="offline")
      * @return Response
      * @throws \Symfony\Component\Translation\Exception\NotFoundResourceException
      */
@@ -19,7 +19,7 @@ class OfflineController extends Controller
     {
         try {
             return $this->render('TwigBundle:Exception:error503.html.twig');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new NotFoundResourceException('Template error 503 not found');
         }
     }

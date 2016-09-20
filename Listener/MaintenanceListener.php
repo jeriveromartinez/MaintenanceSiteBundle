@@ -100,11 +100,17 @@ class MaintenanceListener
 
     private function isPermitRole()
     {
+        $access = false;
         foreach ($this->roles as $role) {
-            if ($this->checker->isGranted($role))
-                return true;
+            try {
+                $access = $this->checker->isGranted($role);
+            } catch (\Exception $e) {
+            }
+
+            if ($access)
+                return $access;
         }
-        return false;
+        return $access;
     }
 
     /**

@@ -34,4 +34,4 @@ app_offline:<br/>
     type:     annotation<br/>
 </code></pre>
 <br/>
-####create a error503.html.twig file into "Resources/TwigBundle/views/Exception/"
+####create a error503.html.twig file into "Resources/TwigBundle/views/Exception/" and add anonymous permission in the firewall

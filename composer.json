@@ -7,22 +7,18 @@
         "email" : "jeriveromartinez@gmail.com"
     }],
     "keywords" : [
-        "maintenance mode test site offline"
+        "maintenance mode", "site offline"
     ],
-    "license" : [
-        "MIT"
-    ],
+    "license" : ["MIT"],
     "require" : {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": "~2.3",
+        "symfony/framework-bundle": "~2.7",
         "symfony/symfony": "*",
         "doctrine/orm": "*",
         "doctrine/doctrine-bundle": "*"
     },
     "autoload" : {
-        "psr-0" : {
-            "J3rm\\MaintenanceSiteBundle\\" : ""
-        }
+        "psr-0" : {"J3rm\\MaintenanceSiteBundle\\" : ""}
     },
     "target-dir" : "J3rm/MaintenanceSiteBundle",
     "repositories" : [{

@@ -9,13 +9,13 @@ new J3rm\MaintenanceSiteBundle\J3rmMaintenanceSiteBundle(),
 ##configurations parameter
 
 <pre><code>j3rm_maintenance_site:<br/>
-      path_enable: /admin <br/>
+      path_enable: [/admin,/login] <br/>
       roles_enable_offline: [ROLE_USER,ROLE_ADMIN]<br/>
       maintenance: true<br/></code>
 </pre><br/>
 Or<br/>
 <pre><code>j3rm_maintenance_site:<br/>
-      path_enable: /admin <br/>
+      path_enable: [/admin,/login] <br/>
       roles_enable_offline: [ROLE_USER,ROLE_ADMIN]<br/>
       database_offline: YourBundle:YourEntity:attributeName (the attribute most be a boolean)<br/></code>
 </pre><br/>
@@ -27,4 +27,11 @@ Or<br/>
 </ul>
 
 <br/>
-####you most be update de TwigBundle, to handle the errors, add error503.html.twig template.
+####this bundle redirect to offline page, for that add this to routing.yml<br/>
+<pre><code>
+app_offline:<br/>
+    resource: "@J3rmMaintenanceSiteBundle/Controller/"<br/>
+    type:     annotation<br/>
+</code></pre>
+<br/>
+####create a error503.html.twig file into "Resources/TwigBundle/views/Exception/" and add anonymous permission in the firewall

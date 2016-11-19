@@ -11,6 +11,8 @@ namespace J3rm\MaintenanceSiteBundle\Listener;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
@@ -20,23 +22,33 @@ class MaintenanceListener
 {
     private $checker;
     private $entityManager;
+    /**
+     * @var Router
+     */
+    private $router;
     private $pathEnable, $roles, $maintenance, $databaseAttribute;
+    private $disabled = false;
 
     /**
      * MaintenanceListener constructor.
      * @param AuthorizationChecker $checker
      * @param EntityManager $entityManager
+     * @param Router $router
      * @param $pathEnable
      * @param $roles
      * @param $maintenance
      * @param $databaseAttribute
-     * @internal param Router $router
+     * @throws \Symfony\Component\Routing\Exception\InvalidParameterException
+     * @throws \Symfony\Component\Routing\Exception\MissingMandatoryParametersException
+     * @throws \Symfony\Component\Routing\Exception\RouteNotFoundException
      */
     public function __construct(AuthorizationChecker $checker, EntityManager $entityManager,
-                                $pathEnable, $roles, $maintenance, $databaseAttribute)
+                                Router $router, $pathEnable, $roles, $maintenance,
+                                $databaseAttribute)
     {
         $this->checker = $checker;
         $this->entityManager = $entityManager;
+        $this->router = $router;
         $this->pathEnable = $pathEnable;
         $this->roles = $roles;
         $this->maintenance = $maintenance;
@@ -47,30 +59,58 @@ class MaintenanceListener
      * @param GetResponseEvent $event
      * @throws NotFoundResourceException
      * @throws ServiceUnavailableHttpException
+     * @throws \InvalidArgumentException
+     * @throws \Exception
+     * @throws \RuntimeException
+     * @throws \Twig_Error
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-
-        if ($this->isOffline() and !$this->isPermitUrl($request) and !$this->isPermitRole()) {
-            throw new ServiceUnavailableHttpException();
+        if ($this->isOffline() and !$this->isRouteOffline($request) and !$this->isPermitUrl($request) and !$this->isPermitRole()) {
+            $this->disabled = true;
+            $url = $this->router->generate('offline');
+            $event->setResponse(new RedirectResponse($url), 503);
         }
+        $this->isRouteOffline($request);
+        return;
     }
 
     private function isPermitUrl($request)
     {
-        if (preg_match('{' . $this->pathEnable . '}', $request->getPathInfo()))
+        $this->pathEnable[] = $this->router->generate('offline');
+        $this->pathEnable[] = '/js/';
+        $this->pathEnable[] = '/css/';
+        $this->pathEnable[] = '/bundles/';
+        $this->pathEnable[] = '/_wdt/';
+        $this->pathEnable[] = '/_profiler/';
+
+        foreach ($this->pathEnable as $path)
+            if (preg_match('{' . $path . '}', $request->getPathInfo()))
+                return true;
+        return false;
+    }
+
+    public function isRouteOffline(Request $request)
+    {
+        if (preg_match('{' . $this->router->generate('offline') . '}', $request->getRequestUri()))
             return true;
         return false;
     }
 
     private function isPermitRole()
     {
+        $access = false;
         foreach ($this->roles as $role) {
-            if ($this->checker->isGranted($role))
-                return true;
+            try {
+                $access = $this->checker->isGranted($role);
+            } catch (\Exception $e) {
+            }
+
+            if ($access)
+                return $access;
         }
-        return false;
+        return $access;
     }
 
     /**
@@ -87,18 +127,18 @@ class MaintenanceListener
     }
 
     /**
-     * @return boolean
-     * @throws NotFoundResourceException
+     * @return bool
+     * @throws Exception
      */
     private function parameterDB()
     {
         try {
             $array = explode(':', $this->databaseAttribute);
             return $this->entityManager->createQueryBuilder('q')
-                ->select('offline.' . $array[2])->from('J3rmMaintenanceSiteBundle:Sites', 'offline')
+                ->select('offline.' . $array[2])->from("$array[0]:$array[1]", 'offline')
                 ->getQuery()->getSingleScalarResult();
         } catch (Exception $e) {
-            throw new NotFoundResourceException;
+            return false;
         }
     }
 }

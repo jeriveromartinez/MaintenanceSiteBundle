@@ -5,7 +5,7 @@ namespace J3rm\MaintenanceSiteBundle\Tests\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
-{
+{ //prueba
     public function testIndex()
     {
         $client = static::createClient();
